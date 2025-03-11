@@ -2,6 +2,7 @@ package com.mindfire.backend.controller;
 
 import com.mindfire.backend.dto.request.LoginRequestDto;
 import com.mindfire.backend.security.JwtTokenProvider;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +22,7 @@ public class AuthenticationController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping
-    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 loginRequestDto.userName(),
                 loginRequestDto.password());
