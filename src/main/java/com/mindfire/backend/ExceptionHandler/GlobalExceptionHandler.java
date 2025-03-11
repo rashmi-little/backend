@@ -49,4 +49,5 @@ public class GlobalExceptionHandler {
     public ProblemDetail handleException(Exception exception) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.valueOf(500), exception.getMessage());
     }
+
 }
