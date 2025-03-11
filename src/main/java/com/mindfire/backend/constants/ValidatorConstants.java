@@ -11,4 +11,7 @@ public class ValidatorConstants {
 
     public static final String PASSWORD_NOT_EMPTY = "Password cannot be empty";
     public static final String PASSWORD_SIZE = "Password must be at least 6 characters long";
+
+    public static final String USER_NAME_NOT_FOUND = "User not exists by user name";
+    public static final String USER_ID_NOT_FOUND = "User with id does not exists";
 }
