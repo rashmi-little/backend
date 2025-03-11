@@ -4,10 +4,13 @@ import com.mindfire.backend.dto.request.UserRequestDto;
 import com.mindfire.backend.dto.response.UserResponseDto;
 import com.mindfire.backend.entity.User;
 import com.mindfire.backend.enums.Role;
+import com.mindfire.backend.mapper.MapHelper;
 import com.mindfire.backend.repository.UserRepository;
 import com.mindfire.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +18,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
-    private final ModelMapper modelMapper;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -24,14 +27,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto create(UserRequestDto userRequestDto) {
-        User user = modelMapper.map(userRequestDto, User.class);
+        User user = MapHelper.mapToUser(userRequestDto);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
 
         User savedUser = userRepository.save(user);
 
-        return modelMapper.map(savedUser, UserResponseDto.class);
+        return MapHelper.mapToUserResponse(savedUser);
     }
 
     @Override
