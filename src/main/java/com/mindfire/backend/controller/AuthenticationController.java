@@ -2,6 +2,7 @@ package com.mindfire.backend.controller;
 
 import com.mindfire.backend.dto.request.LoginRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,13 +17,13 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping
-    public String login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 loginRequestDto.userName(),
                 loginRequestDto.password());
 
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-        return "Dummy jwt token";
+        return ResponseEntity.ok("Dummy jwt token");
     }
 }
