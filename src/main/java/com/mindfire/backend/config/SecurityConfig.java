@@ -1,6 +1,8 @@
 package com.mindfire.backend.config;
 
 import com.mindfire.backend.security.CustomUserDetailsService;
+import com.mindfire.backend.security.JwtAuthenticationEntryPoint;
+import com.mindfire.backend.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,11 +15,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -38,7 +45,14 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(request -> request.anyRequest().permitAll());
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/api/v1/login").permitAll()
+                        .requestMatchers("/api/v1/user-service/user/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/api/v1/user-service/**").hasAuthority("ADMIN")
+                        .anyRequest().authenticated())
+                .formLogin(login -> login.disable())
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
