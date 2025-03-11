@@ -36,4 +36,17 @@ public class GlobalExceptionHandler {
     public ProblemDetail handleIfUserNotFound(UserNotFoundException ex){
         return ProblemDetail.forStatusAndDetail(HttpStatus.valueOf(404),ex.getMessage());
     }
+    /**
+     * Handles general exceptions thrown in the application.
+     * <p>
+     * This method catches all exceptions of type {@link Exception} and returns a {@link ProblemDetail}
+     * with a status code of 500 (Internal Server Error) and the exception message as the detail.
+     *
+     * @param exception the exception that was thrown
+     * @return a {@link ProblemDetail} representing the error response with HTTP status 500
+     */
+    @ExceptionHandler(Exception.class)
+    public ProblemDetail handleException(Exception exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.valueOf(500), exception.getMessage());
+    }
 }
