@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
@@ -28,6 +30,7 @@ public class JwtTokenProvider {
      */
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
+        List<String> roles = authentication.getAuthorities().stream().map(authority->authority.getAuthority()).toList();
 
         Date currentDate = new Date();
 
@@ -36,6 +39,7 @@ public class JwtTokenProvider {
         String token = Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
+                .claim("roles",roles)
                 .setExpiration(expireDate)
                 .signWith(key())
                 .compact();
