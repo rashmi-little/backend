@@ -1,6 +1,6 @@
-package com.mindfire.backend.ExceptionHandler;
+package com.mindfire.backend.exception;
 
-import com.mindfire.backend.customException.UserNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -48,5 +48,23 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleException(Exception exception) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.valueOf(500), exception.getMessage());
+    }
+    /**
+     * Global exception handler for DataIntegrityViolationException.
+     * This handler specifically catches violations of unique constraints in the database
+     * and provides custom error messages based on the constraint that was violated.
+     *
+     * @param ex The exception object that provides information about the violation.
+     * @return A ProblemDetail response with a status and specific error message.
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ProblemDetail handleDuplicateEntry(DataIntegrityViolationException ex) {
+        if (ex.getMessage().contains("UKgj2fy3dcix7ph7k8684gka40c")) {
+            return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,"This username is already registered. Please try another.");
+        } else if (ex.getMessage().contains("UKob8kqyqqgmefl0aco34akdtpe")) {
+            return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,"This email is already taken. Please choose another.");
+        } else {
+            return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,"A database constraint was violated. Please try again.");
+        }
     }
 }

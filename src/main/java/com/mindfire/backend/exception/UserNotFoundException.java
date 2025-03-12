@@ -1,4 +1,4 @@
-package com.mindfire.backend.customException;
+package com.mindfire.backend.exception;
 
 public class UserNotFoundException extends RuntimeException {
 
