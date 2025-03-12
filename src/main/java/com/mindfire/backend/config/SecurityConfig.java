@@ -3,6 +3,7 @@ package com.mindfire.backend.config;
 import com.mindfire.backend.security.CustomUserDetailsService;
 import com.mindfire.backend.security.JwtAuthenticationEntryPoint;
 import com.mindfire.backend.security.JwtAuthenticationFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,7 +52,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/user-service/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(login -> login.disable())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                        .accessDeniedHandler((request, response, accessDeniedException)
+                                -> response.setStatus(HttpServletResponse.SC_FORBIDDEN)))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
