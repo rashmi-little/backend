@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @GetMapping("/user-data")
-    public ResponseEntity<PageResponse<UserResponseDto>> getAllUsersPaginated(@RequestParam int pageNumber ,@RequestParam int pageSize) {
+    public ResponseEntity<PageResponse<UserResponseDto>> getAllUsersPaginated(int pageNumber , int pageSize) {
     return  new ResponseEntity<>(userService.getPaginatedUser(pageNumber,pageSize),HttpStatus.OK);
     }
 
