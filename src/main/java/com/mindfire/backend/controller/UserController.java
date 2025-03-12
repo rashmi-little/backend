@@ -1,6 +1,7 @@
 package com.mindfire.backend.controller;
 
 import com.mindfire.backend.dto.request.UserRequestDto;
+import com.mindfire.backend.dto.response.PageResponse;
 import com.mindfire.backend.dto.response.UserResponseDto;
 import com.mindfire.backend.service.UserService;
 import jakarta.validation.Valid;
@@ -52,5 +53,9 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/user-data")
+    public ResponseEntity<PageResponse<UserResponseDto>> getAllUsersPaginated(int pageNumber , int pageSize) {
+    return  new ResponseEntity<>(userService.getPaginatedUser(pageNumber,pageSize),HttpStatus.OK);
+    }
 
 }
