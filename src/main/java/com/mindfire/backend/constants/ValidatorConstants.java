@@ -14,4 +14,6 @@ public class ValidatorConstants {
 
     public static final String USER_NAME_NOT_FOUND = "User not exists by user name";
     public static final String USER_ID_NOT_FOUND = "User with id does not exists";
+
+    public static final String INVALID_PAGE_SIZE = "Page size can't be negative or Zero";
 }

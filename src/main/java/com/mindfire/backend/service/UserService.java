@@ -1,6 +1,7 @@
 package com.mindfire.backend.service;
 
 import com.mindfire.backend.dto.request.UserRequestDto;
+import com.mindfire.backend.dto.response.PageResponse;
 import com.mindfire.backend.dto.response.UserResponseDto;
 
 import java.util.List;
@@ -42,4 +43,13 @@ public interface UserService {
      * @return A list of UserResponseDto containing the details of all users.
      */
     public List<UserResponseDto> getAll();
+
+    /**
+     * Retrieves all users in page wise
+     * @param pageNumber current page number
+     * @param pageSize size of each page
+     *
+     * @return A page of UserResponseDto containing the details of all users.
+     */
+    public PageResponse<UserResponseDto> getPaginatedUser(int pageNumber, int pageSize);
 }

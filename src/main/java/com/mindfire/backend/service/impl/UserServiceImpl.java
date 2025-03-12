@@ -3,6 +3,7 @@ package com.mindfire.backend.service.impl;
 import com.mindfire.backend.constants.ValidatorConstants;
 import com.mindfire.backend.customException.UserNotFoundException;
 import com.mindfire.backend.dto.request.UserRequestDto;
+import com.mindfire.backend.dto.response.PageResponse;
 import com.mindfire.backend.dto.response.UserResponseDto;
 import com.mindfire.backend.entity.User;
 import com.mindfire.backend.enums.Role;
@@ -13,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -75,5 +79,24 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(MapHelper::mapToUserResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PageResponse<UserResponseDto> getPaginatedUser(int pageNumber, int pageSize) {
+        if (pageNumber <= 0) {
+            throw new RuntimeException(ValidatorConstants.INVALID_PAGE_SIZE);
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+
+        Page<User> pageData = userRepository.findAll(pageable);
+
+        List<UserResponseDto> userResponse = pageData.getContent().stream().map(MapHelper::mapToUserResponse).toList();
+
+        return new PageResponse<UserResponseDto>(userResponse,
+                pageData.getTotalPages(),
+                pageData.getTotalElements(),
+                pageData.getSize(),
+                pageData.getNumber());
     }
 }
