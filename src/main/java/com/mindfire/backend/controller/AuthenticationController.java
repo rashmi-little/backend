@@ -24,7 +24,7 @@ public class AuthenticationController {
     @PostMapping
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                loginRequestDto.userName(),
+                loginRequestDto.email(),
                 loginRequestDto.password());
 
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);

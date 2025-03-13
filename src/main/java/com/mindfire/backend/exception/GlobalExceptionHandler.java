@@ -67,4 +67,16 @@ public class GlobalExceptionHandler {
             return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,"A database constraint was violated. Please try again.");
         }
     }
+
+    /**
+     * Handles {@link RoleNotFoundException} and returns a {@link ProblemDetail} with HTTP 404 status
+     * and the exception message as the detail.
+     *
+     * @param ex the {@link RoleNotFoundException} to handle
+     * @return a {@link ProblemDetail} with status 404 and the exception message
+     */
+    @ExceptionHandler(RoleNotFoundException.class)
+    public ProblemDetail handleIfRoleNotFound(RoleNotFoundException ex){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.valueOf(404),ex.getMessage());
+    }
 }
