@@ -1,9 +1,10 @@
 package com.mindfire.backend.dto.response;
 
-import com.mindfire.backend.enums.Role;
+import com.mindfire.backend.entity.Role;
 
 public record UserResponseDto(
-        String userName,
+        String firstName,
+        String lastName,
         String email,
-        Role role) {
+        String role) {
 }
