@@ -30,6 +30,6 @@ public class MapHelper {
      * @return a new {@link UserResponseDto} containing the user data from the entity
      */
     public static UserResponseDto mapToUserResponse(User user) {
-        return new UserResponseDto(user.getFirstName(), user.getLastName(),user.getEmail(), user.getRole().getName());
+        return new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(),user.getEmail(), user.getRole().getName());
     }
 }
